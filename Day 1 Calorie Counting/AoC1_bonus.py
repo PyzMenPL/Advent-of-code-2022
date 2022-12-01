@@ -7,6 +7,6 @@ with open('01input.txt', 'r') as oFile:
                 maxCal[maxCal.index(min(maxCal))] = sum(elf)
             elf = []
         else:
-            elf.append(int(line.replace('\n', '')))
+            elf.append(int(line))
 
     print(sum(maxCal))
