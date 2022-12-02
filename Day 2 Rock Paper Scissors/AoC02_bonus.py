@@ -1,12 +1,3 @@
-'''
-x - lost
-y - draw
-z - win
-'''
-'''
-najpierw sparawdzaj jaki element ma przeciwnik,
-a później dopiero czy mamy wygrać czy przegrać
-'''
 suma = 0
 with open('02input.txt', 'r') as oFile:
     for line in oFile:
