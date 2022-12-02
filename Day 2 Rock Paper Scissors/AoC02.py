@@ -19,7 +19,7 @@ with open('02input.txt', 'r') as oFile:
         elif line == 'A X\n' or line == 'B Y\n' or line == 'C Z\n':
             suma += 3
             print("Draw")
-        # You don't have to check losing, because
-        # it doesn't change the output
+        # You don't have to check if you are losing,
+        # because it doesn't change the output
 
 print(suma)
