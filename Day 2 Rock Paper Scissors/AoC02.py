@@ -13,12 +13,10 @@ with open('02input.txt', 'r') as oFile:
 
         # Win
         if line == 'A Y\n' or line == 'B Z\n' or line == 'C X\n':
-            print('Win')
             suma += 6
         # Draw
         elif line == 'A X\n' or line == 'B Y\n' or line == 'C Z\n':
             suma += 3
-            print("Draw")
         # You don't have to check if you are losing,
         # because it doesn't change the output
 
