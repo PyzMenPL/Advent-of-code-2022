@@ -1,6 +1,8 @@
 with open('03input.txt', 'r') as oFile:
+    # Lista elementów, które pojawiają się w obu listach
     both_lower = []
     both_upper = []
+
     # Lista elementów, w jednej grupie
     group = []
 
