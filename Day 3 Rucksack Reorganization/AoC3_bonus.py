@@ -1,17 +1,17 @@
 with open('03input.txt', 'r') as oFile:
-    # List of elements, in one group
+    # List of items that appear in both lists
     both = []
 
-    # Lista elementów, w jednej grupie
+    # List of items, in one group
     group = []
 
     for line in oFile:
         # We add each line
         group.append(set(line[:-1]))
 
-        # For each character in the smallest set
+        # If we have 3 elves in a group
         if len(group) == 3:
-            # Dla każdego znaku w najmniejszym zbiorze
+            # For each character in the smallest set
             for letter in min(group):
                 # Check if it occurs in the rest
                 if letter in group[group.index(min(group)) - 1] and letter in group[group.index(min(group)) - 2]:
