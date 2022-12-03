@@ -18,12 +18,8 @@ with open('03input.txt', 'r') as oFile:
 
         # If we have 3 elves in a group
         if len(group) == 3:
-            # For each character in the smallest set
-            for letter in min(group):
-                # Check if it occurs in the rest
-                if letter in group[group.index(min(group)) - 1] and letter in group[group.index(min(group)) - 2]:
-                    # Assign to a list
-                    suma += values[letter]
+            # Adding value for the matching element
+            suma += values[str(group[0] & group[1] & group[2])[2]]
 
             # After finding a group of 3 elves, clear group
             group = []
