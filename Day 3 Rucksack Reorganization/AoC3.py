@@ -10,8 +10,9 @@ with open('03input.txt', 'r') as oFile:
               'T': 46, 'U': 47, 'V': 48, 'W': 49, 'X': 50, 'Y': 51, 'Z': 52}
 
     for line in oFile:
-        # Sorting characters into appropriate lists
+        # Searching through unique values of first half of line
         for letter in set(line[:int(len(line) / 2)]):
+            # Checking if value exists in the second half of the line
             if letter in set(line[int(len(line) / 2):-1]):
                 suma += values[letter]
                 break
