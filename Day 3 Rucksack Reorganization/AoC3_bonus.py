@@ -35,4 +35,3 @@ with open('03input.txt', 'r') as oFile:
         suma += values[letter]
 
     print(suma)
-    
