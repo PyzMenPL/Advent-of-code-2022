@@ -1,5 +1,5 @@
 suma = 0
-with open('02input.txt', 'r') as oFile:
+with open('input.txt', 'r') as oFile:
     for line in oFile:
         # Lost
         if line[2] == 'X':

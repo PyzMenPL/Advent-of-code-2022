@@ -1,4 +1,4 @@
-with open('03input.txt', 'r') as oFile:
+with open('input.txt', 'r') as oFile:
     # Total results
     suma = 0
 

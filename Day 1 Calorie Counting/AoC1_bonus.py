@@ -1,4 +1,4 @@
-with open('01input.txt', 'r') as oFile:
+with open('input.txt', 'r') as oFile:
     maxCal = [0, 0, 0]
     elf = []
     for line in oFile:

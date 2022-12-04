@@ -1,4 +1,4 @@
-with open('02input.txt', 'r') as oFile:
+with open('input.txt', 'r') as oFile:
     suma = 0
     for line in oFile:
         # Rock
