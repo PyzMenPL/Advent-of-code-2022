@@ -11,7 +11,7 @@ with open('input.txt', 'r') as oFile:
             # Assigning values to correct lists
             for index in range(0, len(line) + 1):
                 if index % 4 == 0 and index != 0 and line[index - 3] != ' ':
-                    crates[int(index/4 - 1)].insert(0, line[index - 3])
+                    crates[int(index / 4 - 1)].insert(0, line[index - 3])
 
         elif not preparation:
             # Extracting numbers from lines of code
@@ -25,7 +25,7 @@ with open('input.txt', 'r') as oFile:
             # command[2] - 1 is the index of destination list
 
             # Replacing crates as intended
-            for letter in reversed(crates[command[1] - 1][-(command[0]):]):
+            for letter in crates[command[1] - 1][-(command[0]):]:
                 crates[command[2] - 1].append(letter)
 
             del crates[command[1] - 1][-(command[0]):]
