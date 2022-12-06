@@ -7,18 +7,16 @@ with open('input.txt', 'r') as oFile:
         if line == '\n':
             preparation = False
 
-        elif preparation and '[' in line.replace(' ', ''):
+        elif preparation and '[' in line:
             # Assigning values to correct lists
-            for index in range(0, len(line) + 1):
-                if index % 4 == 0 and index != 0 and line[index - 3] != ' ':
+            for index in range(1, len(line) + 1):
+                if index % 4 == 0 and line[index - 3] != ' ':
                     crates[int(index / 4 - 1)].insert(0, line[index - 3])
 
         elif not preparation:
             # Extracting numbers from lines of code
-            command = []
-            for letter in line.split():
-                if letter.isdigit():
-                    command.append(int(letter))
+            line = line.split()
+            command = [int(line[1]), int(line[3]), int(line[5])]
 
             # -(command[0]) is the range that we want to replace
             # command[1] - 1 is the index of source list
@@ -31,9 +29,6 @@ with open('input.txt', 'r') as oFile:
             del crates[command[1] - 1][-(command[0]):]
 
     # Printing the output
-    for index in range(0, 9):
-        if len(crates[index]) != 0:
-            print(crates[index][-1], end='')
-        else:
-            print(' ', end='')
+    for index in range(0, len(crates)):
+        print(crates[index][-1], end='')
     print(' ')
