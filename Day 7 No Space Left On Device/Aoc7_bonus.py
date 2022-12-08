@@ -1,7 +1,7 @@
 class Filesystem:
     def __init__(self) -> None:
         self.root = Folder('/')
-        # Lista nazw folderów
+        # List of folder names
         self.current_directory = [self.root.name]
 
     def command(self, command) -> None:
@@ -43,100 +43,99 @@ class File:
         return "- {} ({}, size={})".format(self.name, "file", self.size)
 
     def __repr__(self):
-        # Zamiast wypisywać się <class 'str'>, wypisuje się tak jak poniżej
+        # Instead of printing out <class 'str'>, it prints out as follows
         return "Plik '{}'".format(self.name)
 
 
 class Folder(File):
-    # Folder jest dziedzicem klasy File (bierze od niej imię i rozmiar)
+    # Folder is a child of the File class (takes its name and size from it)
     def __init__(self, name: str) -> None:
-        # To samo co self.name = name i self.size = size
+        # The same as self.name = name and self.size = size
         super().__init__(name=name, size=0)
         self.contains = []
 
     def __iter__(self):
-        # Jeżeli rozpocznie się iteracja
-        # Zaczynamy od zera
+        # If iteration starts, we start from zero
         self.index = 0
-        # Kończymy na ostatnim elemencie z listy
+        # We end up with the last item on the list
         self.limit = len(self.contains)
         return self
 
     def __next__(self):
-        # Jeżeli zostanie wywołane next() zwiększamy index
+        # If next() is called we increment the index
         self.index += 1
 
-        # Jeżeli index jest już poza listą, przerywamy iterację
+        # If the index is already out of the list, we abort the iteration
         if self.index == self.limit + 1:
             raise StopIteration
 
-        # Jeżeli index znajduje się w zasięgu listy, zwracamy element listy
+        # If the index is in the range of the list, we return the list element
         return self.contains[self.index - 1]
 
     def __str__(self) -> str:
-        # Jeżeli potrzebujemy nazwy folderu
+        # If we need a folder name
         if self.size == 0:
             return "- {} (dir)".format(self.name)
         else:
             return "- {} (dir, size={})".format(self.name, self.size)
 
     def __repr__(self):
-        # Zamiast wypisywać się <class 'str'>, wypisuje się tak jak poniżej
+        # Instead of printing out <class 'str'>, it prints out as follows
         return "'Folder '{}'".format(self.name)
 
     def add(self, file, dst_folder_path) -> None:
-        # Jeżeli dotrze do folderu docelowego, zapisuje plik.
-        # Gdyby warunek nie sprawdzał, czy plik ma nazwę, zostałby jeszcze zapisany w nieodpowiednich miejscach
+        # If it reaches the destination folder, it saves the file.
+        # If the condition did not check if the file was created, it would still be saved in the wrong places
         if dst_folder_path == [] and file.is_created is False:
             self.contains.append(file)
 
-            # Po dodaniu usuwa nazwę, aby plik nie został ponownie zapisany
+            # Once added, it changes its state so that the file is not saved again
             file.is_created = True
             return None
 
-        # Dla każdego elementu w folderze
+        # For each item in the folder
         for child_folder in self.contains:
-            # Sprawdzanie, czy dążenie do folderu zostało zakończone
+            # Checking whether the pursuit of a folder has been completed
             if len(dst_folder_path) == 0:
                 return None
 
-            # Jeżeli element z listy folderu jest folderem
+            # If the item in the folder list is a folder
             if isinstance(child_folder, type(Folder(''))) and child_folder.name == dst_folder_path[0]:
                 del dst_folder_path[0]
                 child_folder.add(file, dst_folder_path)
 
     def sizes(self):
         for child_folder in self.contains:
-            # Jeżeli jestem folderem
+            # If I am a folder
             if isinstance(self, type(Folder(''))):
                 self.size += int(child_folder.size)
 
-            # Jeżeli napotkam na folder
+            # If I encounter a folder
             if isinstance(child_folder, type(Folder(''))):
                 child_folder.sizes()
                 # After the size is calculated add it to self.size
                 self.size += int(child_folder.size)
 
     def print(self, depth=0) -> None:
-        """Wyświetlenie zawartości podfolderów"""
-        # Wyświetlamy katalog, od którego zaczynamy
+        """View the contents of subfolders"""
+        # We display the directory we started with
         if depth == 0:
             print(depth * '\t', self)
             depth += 1
 
-        # Jeżeli folder jest pusty
+        # If the folder is empty
         if not self.contains:
             print(depth * '\t', "[Empty]")
             return None
 
-        # Dla każdego elementu w folderze
+        # For each item in the folder
         for child_folder in self.contains:
-            # Wyświetl nazwę z zachowaniem odpowiedniego odstępu
+            # Display name with proper spacing
             print(depth * '\t', child_folder)
 
-            # Jeżeli element z listy folderu jest folderem
+            # If the item from the folder list is a folder
             if isinstance(child_folder, type(Folder(''))):
-                # Wyświetl zawartość podfolderu
+                # Display the contents of the subfolder
                 child_folder.print(depth + 1)
 
     def solve(self, space_to_free: int, solution=None):
