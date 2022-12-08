@@ -121,6 +121,11 @@ class Folder(File):
 
     def print(self, depth=0) -> None:
         """Wyświetlenie zawartości podfolderów"""
+        # Wyświetlamy katalog, od którego zaczynamy
+        if depth == 0:
+            print(depth * '\t', self)
+            depth += 1
+
         # Jeżeli folder jest pusty
         if not self.contains:
             print(depth * '\t', "[Empty]")
