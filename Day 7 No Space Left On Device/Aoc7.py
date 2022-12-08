@@ -22,15 +22,9 @@ class Filesystem:
             elif command[0].isdigit():
                 file = File(command[1], command[0])
 
-            print(file)
-
             self.root.add(file, self.current_directory[:])
 
         # If I check for dir and number I don't have to look for the ls command
-
-        else:
-            # Won't probably happen tho
-            print("Invalid syntax: ", command)
 
     def cd(self, dst_name=None) -> None:
         if dst_name == '/':
@@ -145,57 +139,23 @@ class Folder(File):
                 # Wyświetl zawartość podfolderu
                 child_folder.print(depth + 1)
 
+    def solve(self, suma: int = 0) -> int:
+        # Jeżeli jestem folderem o rozmiarze mniejszym niż 100000
+        if isinstance(self, type(Folder(''))) and self.size <= 100000:
+            suma += self.size
 
-with open('test.txt', 'r') as oFile:
-    DEBUG = False
-    if DEBUG:
-        # Creating file system
-        fastFS = Filesystem()
+        for child_folder in self.contains:
+            # Jeżeli mój potomek jest folderem
+            if isinstance(child_folder, type(Folder(''))):
+                suma = child_folder.solve(suma)
 
-        plik = File('plik', 123)
+        return suma
 
-        folder = Folder('Test')
-        folder.contains = [plik]
 
-        dir1 = Folder('dir')
-        dir1.contains = []
+with open('input.txt', 'r') as oFile:
+    fastFS = Filesystem()
+    for line in oFile:
+        fastFS.command(line)
 
-        dir2 = Folder('dir2')
-        dir2.contains = [dir1]
-        folder.contains.append(dir2)
-
-        fastFS.root.contains = folder.contains
-
-        print("Before:")
-        fastFS.root.print()
-
-        fastFS.command('$ cd /')
-        fastFS.command('$ cd dir2')
-        print(fastFS.current_directory)
-
-        fastFS.command('dir proba')
-        print(fastFS.current_directory)
-        print(' ')
-
-        fastFS.command('$ cd dir')
-        fastFS.command('420 weed')
-        fastFS.command('$ cd ..')
-        fastFS.command('$ cd proba')
-        fastFS.command('420 surfer')
-        print(' ')
-
-        fastFS.command('$ cd ..')
-        fastFS.command('2137 JP')
-        print(fastFS.current_directory)
-        print(' ')
-
-        print("\nAfter:")
-        fastFS.root.print()
-    else:
-        fastFS = Filesystem()
-        for line in oFile:
-            fastFS.command(line)
-
-        fastFS.root.sizes()
-        print(' ')
-        fastFS.root.print()
+    fastFS.root.sizes()
+    print(fastFS.root.solve())
