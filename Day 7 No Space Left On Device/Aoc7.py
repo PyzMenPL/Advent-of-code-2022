@@ -33,7 +33,9 @@ class Filesystem:
             print("Invalid syntax: ", command)
 
     def cd(self, dst_name=None) -> None:
-        if dst_name != '/':
+        if dst_name == '/':
+            self.current_directory = []
+        else:
             self.current_directory.append(dst_name)
 
     # TO DO
@@ -52,7 +54,7 @@ class File:
         self.is_created = False
 
     def __str__(self):
-        return "{} {}".format(self.size, self.name)
+        return "- {} ({}, size={})".format(self.name, "file", self.size)
 
     def __repr__(self):
         # Zamiast wypisywać się <class 'str'>, wypisuje się tak jak poniżej
@@ -87,31 +89,33 @@ class Folder(File):
 
     def __str__(self) -> str:
         # Jeżeli potrzebujemy nazwy folderu
-        return self.name
+        if self.size == 0:
+            return "- {} (dir)".format(self.name)
+        else:
+            return "- {} (dir, size={})".format(self.name, self.size)
 
     def __repr__(self):
         # Zamiast wypisywać się <class 'str'>, wypisuje się tak jak poniżej
         return "'Folder '{}'".format(self.name)
 
     def add(self, file, dst_folder_path) -> None:
-        print(dst_folder_path)
+        # Jeżeli dotrze do folderu docelowego, zapisuje plik.
+        # Gdyby warunek nie sprawdzał, czy plik ma nazwę, zostałby jeszcze zapisany w nieodpowiednich miejscach
+        if dst_folder_path == [] and file.is_created is False:
+            self.contains.append(file)
+
+            # Po dodaniu usuwa nazwę, aby plik nie został ponownie zapisany
+            file.is_created = True
+            return None
+
         # Dla każdego elementu w folderze
         for child_folder in self.contains:
-            print(self.contains)
-            print(child_folder)
-            # Jeżeli dotrze do folderu docelowego, zapisuje plik.
-            # Gdyby warunek nie sprawdzał, czy plik ma nazwę, zostałby jeszcze zapisany w nieodpowiednich miejscach
-            if dst_folder_path == [] and file.is_created is False:
-                print("Dodaję plik ", file, " do ", self)
-                self.contains.append(file)
-
-                # Po dodaniu usuwa nazwę, aby plik nie został ponownie zapisany
-                file.is_created = True
+            # Sprawdzanie, czy dążenie do folderu zostało zakończone
+            if len(dst_folder_path) == 0:
                 return None
 
             # Jeżeli element z listy folderu jest folderem
             if isinstance(child_folder, type(Folder(''))) and child_folder.name == dst_folder_path[0]:
-                print("Bylem tu")
                 del dst_folder_path[0]
                 child_folder.add(file, dst_folder_path)
 
@@ -133,8 +137,8 @@ class Folder(File):
                 child_folder.print(depth + 1)
 
 
-with open('test.txt', 'r') as oFile:
-    DEBUG = True
+with open('input.txt', 'r') as oFile:
+    DEBUG = False
     if DEBUG:
         # Creating file system
         fastFS = Filesystem()
@@ -160,7 +164,7 @@ with open('test.txt', 'r') as oFile:
         fastFS.command('$ cd dir2')
         print(fastFS.current_directory)
 
-        del fastFS.current_directory[0]
+        #del fastFS.current_directory[0]
 
         fastFS.command('dir proba')
         print(fastFS.current_directory)
@@ -168,7 +172,9 @@ with open('test.txt', 'r') as oFile:
 
         fastFS.command('$ cd dir')
         fastFS.command('420 weed')
-        print(fastFS.current_directory)
+        fastFS.command('$ cd ..')
+        fastFS.command('$ cd proba')
+        fastFS.command('420 surfer')
         print(' ')
 
         fastFS.command('$ cd ..')
@@ -184,7 +190,3 @@ with open('test.txt', 'r') as oFile:
             fastFS.command(line)
 
         fastFS.root.print()
-
-    print("\n\nFiles don't save in /dir2/dir but only in /dir2")
-    print("Files don't save in /dir2/proba but they disappear")
-    print("\nOptional: Try to remove '/' from path to directory")
