@@ -38,17 +38,9 @@ class Filesystem:
         else:
             self.current_directory.append(dst_name)
 
-    # TO DO
-    @staticmethod
-    def sizes(mode):
-        if mode == 'get':
-            print()
-        elif mode == 'update':
-            print()
-
 
 class File:
-    def __init__(self, name, size):
+    def __init__(self, name: str, size: int):
         self.name = name
         self.size = size
         self.is_created = False
@@ -63,7 +55,7 @@ class File:
 
 class Folder(File):
     # Folder jest dziedzicem klasy File (bierze od niej imię i rozmiar)
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         # To samo co self.name = name i self.size = size
         super().__init__(name=name, size=0)
         self.contains = []
@@ -119,6 +111,18 @@ class Folder(File):
                 del dst_folder_path[0]
                 child_folder.add(file, dst_folder_path)
 
+    def sizes(self):
+        for child_folder in self.contains:
+            # Jeżeli jestem folderem
+            if isinstance(self, type(Folder(''))):
+                self.size += int(child_folder.size)
+
+            # Jeżeli napotkam na folder
+            if isinstance(child_folder, type(Folder(''))):
+                child_folder.sizes()
+                # After the size is calculated add it to self.size
+                self.size += int(child_folder.size)
+
     def print(self, depth=0) -> None:
         """Wyświetlenie zawartości podfolderów"""
         # Wyświetlamy katalog, od którego zaczynamy
@@ -142,7 +146,7 @@ class Folder(File):
                 child_folder.print(depth + 1)
 
 
-with open('input.txt', 'r') as oFile:
+with open('test.txt', 'r') as oFile:
     DEBUG = False
     if DEBUG:
         # Creating file system
@@ -169,8 +173,6 @@ with open('input.txt', 'r') as oFile:
         fastFS.command('$ cd dir2')
         print(fastFS.current_directory)
 
-        #del fastFS.current_directory[0]
-
         fastFS.command('dir proba')
         print(fastFS.current_directory)
         print(' ')
@@ -194,4 +196,6 @@ with open('input.txt', 'r') as oFile:
         for line in oFile:
             fastFS.command(line)
 
+        fastFS.root.sizes()
+        print(' ')
         fastFS.root.print()
