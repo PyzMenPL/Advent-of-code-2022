@@ -19,10 +19,10 @@ with open('input.txt', 'r') as oFile:
     # Declare the output
     suma = 0
 
-    for collumn in range(0, grid_range):
+    for column in range(0, grid_range):
         for row in range(0, grid_range):
             # If the tree is on the edge
-            if row == 0 or row == grid_range - 1 or collumn == 0 or collumn == grid_range - 1:
+            if row == 0 or row == grid_range - 1 or column == 0 or column == grid_range - 1:
                 suma += 1
 
             # If the tree is not on the edge
@@ -33,52 +33,52 @@ with open('input.txt', 'r') as oFile:
                 if not already_visible:
                     # Length from start to current place
                     # len(grid[0:column]) -> 99*1, 99*2, 99*3, ..., 99*98
-                    for i in range(1, len(grid[0:collumn])+1):
+                    for i in range(1, len(grid[0:column]) + 1):
                         # If we approach the same or higher tree from top
-                        if grid[collumn][row] <= grid[collumn - i][row]:
+                        if grid[column][row] <= grid[column - i][row]:
                             suma -= 1
                             break
 
                         # If we have maximal i and the loop is still working,
                         # this means that the tree is visible
-                        if i == len(grid[0:collumn]):
+                        if i == len(grid[0:column]):
                             already_visible = True
 
                     # If the tree is not visible, nothing will change. Otherwise, suma += 1
                     suma += 1
 
                 if not already_visible:
-                    for i in range(1, len(grid[collumn:grid_range-1])+1):
+                    for i in range(1, len(grid[column:grid_range - 1]) + 1):
                         # If we approach the same or higher tree from bottom
-                        if grid[collumn][row] <= grid[collumn + i][row]:
+                        if grid[column][row] <= grid[column + i][row]:
                             suma -= 1
                             break
 
-                        if i == len(grid[collumn:grid_range-1]):
+                        if i == len(grid[column:grid_range - 1]):
                             already_visible = True
 
                     suma += 1
 
                 if not already_visible:
-                    for i in range(1, len(grid[collumn][row:grid_range])):
+                    for i in range(1, len(grid[column][row:grid_range])):
                         # If we approach the same or higher tree from right
-                        if grid[collumn][row] <= grid[collumn][row + i]:
+                        if grid[column][row] <= grid[column][row + i]:
                             suma -= 1
                             break
 
-                        if i == len(grid[collumn][row:grid_range])-1:
+                        if i == len(grid[column][row:grid_range])-1:
                             already_visible = True
 
                     suma += 1
 
                 if not already_visible:
-                    for i in range(1, len(grid[collumn][0:row])+1):
+                    for i in range(1, len(grid[column][0:row]) + 1):
                         # If we approach the same or higher tree from left
-                        if grid[collumn][row] <= grid[collumn][row - i]:
+                        if grid[column][row] <= grid[column][row - i]:
                             suma -= 1
                             break
 
-                        if i == len(grid[collumn][0:row])-1:
+                        if i == len(grid[column][0:row])-1:
                             already_visible = True
 
                     suma += 1
