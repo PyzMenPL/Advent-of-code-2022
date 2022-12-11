@@ -111,3 +111,4 @@ with open('test2.txt', 'r') as oFile:
     # print(tail_cords)
 
     print(len(set(tail_cords)))
+    print("3389 is too high")
