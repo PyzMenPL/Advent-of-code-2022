@@ -5,6 +5,7 @@ class Cyclist:
 
     def cycle(self, register):
         """Whenever cycle takes place"""
+        # Incrementing the value by 1
         self.cycles += 1
 
         # Check if we have to read this register
