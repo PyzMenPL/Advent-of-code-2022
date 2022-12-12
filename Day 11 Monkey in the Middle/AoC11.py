@@ -15,18 +15,17 @@ class Monkey:
         self.inspections = 0
 
     def execute_order_66(self) -> dict:
-        commands = {}
+        commands = []
         for item in self.items:
-            if item == 74:
-                print("Tutaj!")
+            print(item)
             new_item = self.inspect(item)
 
             new_item = int(float(new_item)/3)
-            print(new_item)
+            #print(new_item)
 
             receiver = self.test(new_item)
 
-            commands[new_item] = receiver
+            commands.append({new_item: receiver})
 
         self.items = []
         return commands
@@ -98,17 +97,20 @@ with open('input.txt', 'r') as oFile:
         elif line == '\n':
             line_index = 0
 
-    # Range 80 because 20 * 4rounds
-    for i in range(0, 80):
+    # 20 rounds * amount of monkeys
+    for i in range(0, 20 * len(monkeys)):
+        print('Cykl: ', i, '\n')
         # Ordered monkeys
         print("Małpa ", i % len(monkeys), " ma ", monkeys[i % len(monkeys)].items)
         commands = monkeys[i % len(monkeys)].execute_order_66()
 
-        for key, value in commands.items():
-            print("Małpa ", value, " dostaje ", key)
-            monkeys[value].items.append(key)
+        for command in commands:
+            for key, value in command.items():
+                print("Małpa ", value, " dostaje ", key)
+                monkeys[value].items.append(key)
 
-        print("Małpa ", i % len(monkeys), " ma ", monkeys[i % len(monkeys)].items)
+        #print("Małpa ", i % len(monkeys), " ma ", monkeys[i % len(monkeys)].items)
+        print()
 
     inspections = {}
     for i in range(0, len(monkeys)):
@@ -119,4 +121,7 @@ with open('input.txt', 'r') as oFile:
     for i in sorted(inspections.values())[-2:]:
         outcome *= i
 
+    print(inspections)
+
+    print('19728 too low')
     print(outcome)
