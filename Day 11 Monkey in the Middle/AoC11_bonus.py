@@ -12,12 +12,12 @@ class Monkey:
         self.true_target = 0
         self.false_target = 0
 
-    def execute_order_66(self) -> list:
+    def execute_order_66(self, modulo) -> list:
         """Command that makes the monkey go brrrrr"""
         list_of_commands = []
         for item in range(0, len(self.items)):
             # We are using pop() because items has to be removed, and we are lowering the worry level at the same time
-            new_item = int(self.inspect(self.items.pop(0))/3)
+            new_item = int(self.inspect(self.items.pop(0)) % modulo)
 
             # Deciding who the receiver will be inside append()
             list_of_commands.append({new_item: self.test(new_item)})
@@ -91,11 +91,16 @@ with open('input.txt', 'r') as oFile:
     # Creating list of with len(monkeys) elements
     inspections = [0] * len(monkeys)
 
+    # Getting the biggest number that can divide every new worry level of an item
+    mod = 1
+    for monkey in monkeys:
+        mod *= monkey.dividable
+
     # 20 rounds * amount of monkeys
-    for i in range(0, 20):
+    for i in range(0, 10000):
         for monkey in monkeys:
             # Heart of the program
-            commands = monkey.execute_order_66()
+            commands = monkey.execute_order_66(mod)
 
             for command in commands:
                 # Counting inspections
